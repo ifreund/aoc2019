@@ -1,3 +1,5 @@
+use aoc_runner_derive::{aoc, aoc_generator};
+
 #[aoc_generator(day1)]
 pub fn parse_day1(input: &str) -> Vec<i32> {
     input.lines().map(|x| x.parse::<i32>().unwrap()).collect()
