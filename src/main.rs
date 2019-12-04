@@ -1,3 +1,4 @@
+#![feature(is_sorted)]
 use aoc_runner_derive::aoc_main;
 
 mod solutions;
