@@ -43,7 +43,7 @@ pub fn solve_day2_part1(input: &[usize]) -> usize {
 
 #[aoc(day2, part2)]
 pub fn solve_day2_part2(input: &[usize]) -> usize {
-    const TARGET: usize = 19690720;
+    const TARGET: usize = 19_690_720;
     (0..100)
         .flat_map(|noun| (0..100).map(move |verb| (noun, verb)))
         .find(|(noun, verb)| compute(input, *noun, *verb) == TARGET)

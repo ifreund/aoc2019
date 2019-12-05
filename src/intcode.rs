@@ -48,12 +48,12 @@ impl Instruction {
                 match raw_mode {
                     0 => Mode::Position,
                     1 => Mode::Immediate,
-                    _ => panic!("ERROR: {} has an invalid parameter mode"),
+                    _ => panic!("ERROR: {} is an invalid parameter mode", raw_mode),
                 }
             }
             let param1 = read_mode(raw % 1000 / 100);
-            let param2 = read_mode(raw % 10000 / 1000);
-            let param3 = read_mode(raw % 100000 / 10000);
+            let param2 = read_mode(raw % 10_000 / 1000);
+            let param3 = read_mode(raw % 100_000 / 10_000);
             vec![param1, param2, param3]
         };
         Instruction {
