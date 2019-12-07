@@ -1,3 +1,6 @@
+use std::sync::mpsc::{channel, Receiver, Sender};
+use std::thread;
+
 #[derive(PartialEq)]
 enum Opcode {
     Add,
@@ -76,11 +79,18 @@ fn read_param(
     }
 }
 
-pub fn execute(memory: &[i32], input: &[i32]) -> Vec<i32> {
-    let mut memory = memory.to_owned();
-    let mut input = input.iter();
-    let mut output = Vec::new();
+pub fn execute(program: &[i32], input: &[i32]) -> i32 {
+    let (tx_in, rx_in) = channel();
+    let (tx_out, rx_out) = channel();
+    let program = program.to_vec();
+    thread::spawn(move || execute_threaded(program, rx_in, tx_out));
+    for value in input {
+        tx_in.send(*value).unwrap();
+    }
+    rx_out.iter().last().unwrap()
+}
 
+pub fn execute_threaded(mut memory: Vec<i32>, input: Receiver<i32>, output: Sender<i32>) {
     let mut instruction_pointer = 0;
     loop {
         let instruction = Instruction::new(memory[instruction_pointer]);
@@ -112,11 +122,13 @@ pub fn execute(memory: &[i32], input: &[i32]) -> Vec<i32> {
             }
             Opcode::In => {
                 let addr = memory[instruction_pointer + 1];
-                memory[addr as usize] = *input.next().expect("ERROR: exhausted input");
+                memory[addr as usize] = input.recv().expect("ERROR: failed to receive input");
                 instruction_pointer += 2;
             }
             Opcode::Out => {
-                output.push(read_param(1, &instruction, instruction_pointer, &memory));
+                output
+                    .send(read_param(1, &instruction, instruction_pointer, &memory))
+                    .expect("ERROR: failed to send output");
                 instruction_pointer += 2;
             }
             Opcode::JumpIfTrue | Opcode::JumpIfFalse => {
@@ -130,7 +142,7 @@ pub fn execute(memory: &[i32], input: &[i32]) -> Vec<i32> {
                     instruction_pointer += 3;
                 }
             }
-            Opcode::Halt => return output,
+            Opcode::Halt => return,
         }
     }
 }
