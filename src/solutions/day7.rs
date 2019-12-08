@@ -16,11 +16,7 @@ fn next_permutation(current: &mut [i32]) -> Option<&[i32]> {
     let j = (0..current.len())
         .rev()
         .skip(1)
-        .find(|i| current[*i] < current[*i + 1]);
-    if j.is_none() {
-        return None;
-    }
-    let j = j.unwrap();
+        .find(|i| current[*i] < current[*i + 1])?;
     let k = current.iter().rposition(|i| current[j] < *i).unwrap();
     current.swap(j, k);
     current[j + 1..].reverse();
