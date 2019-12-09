@@ -5,14 +5,14 @@ use std::sync::mpsc::channel;
 use std::thread;
 
 #[aoc_generator(day7)]
-pub fn parse_day7(input: &str) -> Vec<i32> {
+pub fn parse_day7(input: &str) -> Vec<i64> {
     input
         .split(',')
-        .map(|x| x.parse::<i32>().unwrap())
+        .map(|x| x.parse::<i64>().unwrap())
         .collect()
 }
 
-fn next_permutation(current: &mut [i32]) -> Option<&[i32]> {
+fn next_permutation(current: &mut [i64]) -> Option<&[i64]> {
     let j = (0..current.len())
         .rev()
         .skip(1)
@@ -24,13 +24,15 @@ fn next_permutation(current: &mut [i32]) -> Option<&[i32]> {
 }
 
 #[aoc(day7, part1)]
-pub fn solve_day7_part1(program: &[i32]) -> i32 {
+pub fn solve_day7_part1(program: &[i64]) -> i64 {
     let mut phase_settings = vec![0, 1, 2, 3, 4];
     let mut current_best = 0;
     while let Some(permutation) = next_permutation(phase_settings.as_mut_slice()) {
         let mut signal = 0;
         for setting in permutation.iter() {
-            signal = intcode::execute(program, &[*setting, signal]);
+            signal = *intcode::execute(program, &[*setting, signal])
+                .last()
+                .unwrap();
         }
         current_best = max(current_best, signal);
     }
@@ -38,7 +40,7 @@ pub fn solve_day7_part1(program: &[i32]) -> i32 {
 }
 
 #[aoc(day7, part2)]
-pub fn solve_day7_part2(program: &[i32]) -> i32 {
+pub fn solve_day7_part2(program: &[i64]) -> i64 {
     let mut phase_settings = vec![5, 6, 7, 8, 9];
     let mut current_best = 0;
     while let Some(permutation) = next_permutation(phase_settings.as_mut_slice()) {
