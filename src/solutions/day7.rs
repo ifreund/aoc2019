@@ -60,15 +60,15 @@ pub fn solve_day7_part2(program: &[i64]) -> i64 {
 
         // Spawn intcode processors
         let cloned = program.to_vec();
-        thread::spawn(move || intcode::execute_threaded(cloned, rx_ma, tx_ab));
+        thread::spawn(move || intcode::execute_threaded(cloned, rx_ma, tx_ab, None));
         let cloned = program.to_vec();
-        thread::spawn(move || intcode::execute_threaded(cloned, rx_ab, tx_bc));
+        thread::spawn(move || intcode::execute_threaded(cloned, rx_ab, tx_bc, None));
         let cloned = program.to_vec();
-        thread::spawn(move || intcode::execute_threaded(cloned, rx_bc, tx_cd));
+        thread::spawn(move || intcode::execute_threaded(cloned, rx_bc, tx_cd, None));
         let cloned = program.to_vec();
-        thread::spawn(move || intcode::execute_threaded(cloned, rx_cd, tx_de));
+        thread::spawn(move || intcode::execute_threaded(cloned, rx_cd, tx_de, None));
         let cloned = program.to_vec();
-        thread::spawn(move || intcode::execute_threaded(cloned, rx_de, tx_em));
+        thread::spawn(move || intcode::execute_threaded(cloned, rx_de, tx_em, None));
 
         // Start the amplification
         tx_ma.send(0).unwrap();

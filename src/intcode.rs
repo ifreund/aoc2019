@@ -74,7 +74,7 @@ pub fn execute(program: &[i64], input: &[i64]) -> Vec<i64> {
     let (tx_in, rx_in) = channel();
     let (tx_out, rx_out) = channel();
     let program = program.to_vec();
-    thread::spawn(move || execute_threaded(program, rx_in, tx_out));
+    thread::spawn(move || execute_threaded(program, rx_in, tx_out, None));
     for value in input {
         tx_in.send(*value).unwrap();
     }
@@ -112,7 +112,12 @@ fn write_param(
     };
 }
 
-pub fn execute_threaded(mut memory: Vec<i64>, input: Receiver<i64>, output: Sender<i64>) {
+pub fn execute_threaded(
+    mut memory: Vec<i64>,
+    input: Receiver<i64>,
+    output: Sender<i64>,
+    requester: Option<&Sender<()>>,
+) {
     // Expand and fill with zeros
     memory.resize(0xFFFF, 0);
     let mut instruction_pointer = 0;
@@ -155,6 +160,11 @@ pub fn execute_threaded(mut memory: Vec<i64>, input: Receiver<i64>, output: Send
                 instruction_pointer += 4;
             }
             Opcode::In => {
+                if let Some(requester_tx) = requester {
+                    requester_tx
+                        .send(())
+                        .expect("ERROR: failed to send input request");
+                }
                 let value = input.recv().expect("ERROR: failed to receive input");
                 write_param(
                     value,
