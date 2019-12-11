@@ -97,7 +97,7 @@ pub fn solve_day10_part2(input: &[(i32, i32)]) -> i32 {
         roidmap
             .entry(angle)
             .and_modify(|roidlist: &mut Vec<_>| roidlist.push(roid))
-            .or_insert(vec![roid]);
+            .or_insert_with(|| vec![roid]);
     }
 
     let mut count = 1;
