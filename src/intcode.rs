@@ -1,4 +1,4 @@
-use std::sync::mpsc::{channel, Receiver, Sender};
+use std::sync::mpsc::{sync_channel, Receiver, SyncSender};
 use std::thread;
 
 #[derive(PartialEq)]
@@ -71,8 +71,8 @@ impl Instruction {
 }
 
 pub fn execute(program: &[i64], input: &[i64]) -> Vec<i64> {
-    let (tx_in, rx_in) = channel();
-    let (tx_out, rx_out) = channel();
+    let (tx_in, rx_in) = sync_channel(100);
+    let (tx_out, rx_out) = sync_channel(100);
     let program = program.to_vec();
     thread::spawn(move || execute_threaded(program, rx_in, tx_out, None));
     for value in input {
@@ -115,8 +115,8 @@ fn write_param(
 pub fn execute_threaded(
     mut memory: Vec<i64>,
     input: Receiver<i64>,
-    output: Sender<i64>,
-    requester: Option<&Sender<()>>,
+    output: SyncSender<i64>,
+    requester: Option<&SyncSender<()>>,
 ) {
     // Expand and fill with zeros
     memory.resize(0xFFFF, 0);

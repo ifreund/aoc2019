@@ -7,3 +7,4 @@ edition = "2018"
 [dependencies]
 aoc-runner = "0.2.2"
 aoc-runner-derive = "0.2.2"
+pancurses = "0.16.1" # for total unnecessary day 13 graphics

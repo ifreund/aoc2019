@@ -1,7 +1,7 @@
 use crate::intcode;
 use aoc_runner_derive::{aoc, aoc_generator};
 use std::collections::HashMap;
-use std::sync::mpsc::channel;
+use std::sync::mpsc::sync_channel;
 use std::sync::mpsc::TryRecvError;
 use std::thread;
 
@@ -23,9 +23,9 @@ enum Rotation {
 #[aoc(day11, part1)]
 pub fn solve_day11_part1(program: &[i64]) -> usize {
     // Start the brain of the robot
-    let (tx_in, rx_in) = channel();
-    let (tx_out, rx_out) = channel();
-    let (tx_req, rx_req) = channel();
+    let (tx_in, rx_in) = sync_channel(0);
+    let (tx_out, rx_out) = sync_channel(0);
+    let (tx_req, rx_req) = sync_channel(0);
     let program = program.to_vec();
     thread::spawn(move || intcode::execute_threaded(program, rx_in, tx_out, Some(&tx_req)));
 
@@ -70,9 +70,9 @@ pub fn solve_day11_part1(program: &[i64]) -> usize {
 #[aoc(day11, part2)]
 pub fn solve_day11_part2(program: &[i64]) -> String {
     // Start the brain of the robot
-    let (tx_in, rx_in) = channel();
-    let (tx_out, rx_out) = channel();
-    let (tx_req, rx_req) = channel();
+    let (tx_in, rx_in) = sync_channel(0);
+    let (tx_out, rx_out) = sync_channel(0);
+    let (tx_req, rx_req) = sync_channel(0);
     let program = program.to_vec();
     thread::spawn(move || intcode::execute_threaded(program, rx_in, tx_out, Some(&tx_req)));
 

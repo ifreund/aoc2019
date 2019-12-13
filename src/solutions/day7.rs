@@ -1,7 +1,7 @@
 use crate::intcode;
 use aoc_runner_derive::{aoc, aoc_generator};
 use std::cmp::max;
-use std::sync::mpsc::channel;
+use std::sync::mpsc::sync_channel;
 use std::thread;
 
 #[aoc_generator(day7)]
@@ -44,12 +44,12 @@ pub fn solve_day7_part2(program: &[i64]) -> i64 {
     let mut phase_settings = vec![5, 6, 7, 8, 9];
     let mut current_best = 0;
     while let Some(permutation) = next_permutation(phase_settings.as_mut_slice()) {
-        let (tx_ma, rx_ma) = channel();
-        let (tx_ab, rx_ab) = channel();
-        let (tx_bc, rx_bc) = channel();
-        let (tx_cd, rx_cd) = channel();
-        let (tx_de, rx_de) = channel();
-        let (tx_em, rx_em) = channel();
+        let (tx_ma, rx_ma) = sync_channel(20);
+        let (tx_ab, rx_ab) = sync_channel(20);
+        let (tx_bc, rx_bc) = sync_channel(20);
+        let (tx_cd, rx_cd) = sync_channel(20);
+        let (tx_de, rx_de) = sync_channel(20);
+        let (tx_em, rx_em) = sync_channel(20);
 
         // Initalize amplifiers
         tx_ma.send(permutation[0]).unwrap();
