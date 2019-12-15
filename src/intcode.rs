@@ -161,11 +161,14 @@ pub fn execute_threaded(
             }
             Opcode::In => {
                 if let Some(requester_tx) = requester {
-                    requester_tx
-                        .send(())
-                        .expect("ERROR: failed to send input request");
+                    if requester_tx.send(()).is_err() {
+                        return;
+                    }
                 }
-                let value = input.recv().expect("ERROR: failed to receive input");
+                let value = match input.recv() {
+                    Ok(value) => value,
+                    Err(_) => return,
+                };
                 write_param(
                     value,
                     1,
@@ -177,7 +180,7 @@ pub fn execute_threaded(
                 instruction_pointer += 2;
             }
             Opcode::Out => {
-                output
+                if output
                     .send(read_param(
                         1,
                         &instruction,
@@ -185,7 +188,10 @@ pub fn execute_threaded(
                         &memory,
                         relative_base,
                     ))
-                    .expect("ERROR: failed to send output");
+                    .is_err()
+                {
+                    return;
+                };
                 instruction_pointer += 2;
             }
             Opcode::JumpIfTrue | Opcode::JumpIfFalse => {
