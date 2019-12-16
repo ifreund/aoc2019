@@ -160,6 +160,6 @@ mod test {
 
     #[test]
     fn example_2() {
-        assert_eq!(solve_day12_part2(&parse_day12(EXAMPLE_2)), 331346071640472);
+        assert_eq!(solve_day12_part2(&parse_day12(EXAMPLE_2)), 4686774924);
     }
 }
