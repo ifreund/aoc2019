@@ -57,7 +57,7 @@ pub fn solve_day16_part2(input: &[i32]) -> String {
         .cycle()
         .take(10_000 * input.len())
         .skip(offset)
-        .map(|&x| x)
+        .copied()
         .collect();
     for _ in 0..100 {
         // The fact that we skip over half (important) of the elements means that we can just sum

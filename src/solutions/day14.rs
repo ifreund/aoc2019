@@ -58,7 +58,7 @@ pub fn solve_day14_part1(input: &HashMap<String, (i64, Vec<(i64, String)>)>) -> 
 #[aoc(day14, part2)]
 pub fn solve_day14_part2(input: &HashMap<String, (i64, Vec<(i64, String)>)>) -> i64 {
     // A rough estimate based on part 1
-    let mut fuel = 1_000_000_000_000 / 843220 * 3 / 2;
+    let mut fuel = 1_000_000_000_000 / 843_220 * 3 / 2;
     let mut reqs = HashMap::new();
     reqs.insert("ORE", -1_000_000_000_000);
     reqs.insert("FUEL", fuel);
