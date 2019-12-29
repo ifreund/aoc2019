@@ -1,0 +1,30 @@
+
+     CQ - SC - PF
+     |
+     HC 
+     |         SL - PA - HW
+     EN        |    |
+     |         |    KI
+     AC - SO   |    |
+     |         |    OB
+     HD ------ ST
+     |         |
+GW - SB        |
+     |         |
+     NV        |
+               |
+     CD - WD - HB
+
+GW - astronaut ice cream - GOOD
+SB - hologram            - GOOD
+HC - space heater        - GOOD
+HD - antenna             - GOOD
+SL - mutex
+NV - mug
+CD - loom                - TOO HEAVY
+PA - tambourine          - TOO HEAVY
+WD - giant electromagnet - BAD
+ST - infinite loop       - BAD
+SO - escape pod          - BAD
+OB - photons             - BAD
+KI - molten lava         - BAD
